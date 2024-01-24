@@ -1,7 +1,8 @@
 import SearchInput from "@/components/SearchInputInHeader/SearchInput"
-import HeaderTitle from "./(components)/HeaderTitle/HeaderTitle"
-import MatchTabs from "./(components)/TabsSection/Tabs"
-import InfiniteScrollTab from "./(components)/TabsSection/Tabs"
+import HeaderTitle from "../../components/HeaderTitle/HeaderTitle"
+import DateTabs from "./(components)/TabsSection/Tabs"
+import Dock from "@/components/Dock/Dock"
+import HeaderTitleInMatches from "./(components)/HeaderTitleInMatches/HeaderTitleInMatches"
 
 export default function MatchesLayout({
     children,
@@ -10,13 +11,11 @@ export default function MatchesLayout({
 }) {
     return (
         <section>
-            <div className="p-4">
-                <HeaderTitle />
+            <div className="p-4 bg-white">
+                <HeaderTitleInMatches />
                 <SearchInput />
-                <InfiniteScrollTab />
+                <DateTabs />
             </div>
-
-            {/* <MatchTabs /> */}
             {children}
         </section>
     )

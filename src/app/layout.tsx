@@ -1,3 +1,4 @@
+import Dock from "@/components/Dock/Dock";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className} style={{ backgroundColor: '#F5F6FB' }}>
+        {children}
+        <Dock />
+      </body>
     </html>
   );
 }

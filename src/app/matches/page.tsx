@@ -1,8 +1,11 @@
 import React from 'react'
+import GameSectionDropDown from './(components)/GameSection/GameSection'
 
 function Matches() {
     return (
-        <div>test matches</div>
+        <div className=' flex w-full p-4'>
+            <GameSectionDropDown />
+        </div>
     )
 }
 

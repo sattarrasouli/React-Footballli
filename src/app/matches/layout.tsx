@@ -1,6 +1,7 @@
 import SearchInput from "@/components/SearchInputInHeader/SearchInput"
 import HeaderTitle from "./(components)/HeaderTitle/HeaderTitle"
 import MatchTabs from "./(components)/TabsSection/Tabs"
+import InfiniteScrollTab from "./(components)/TabsSection/Tabs"
 
 export default function MatchesLayout({
     children,
@@ -12,9 +13,10 @@ export default function MatchesLayout({
             <div className="p-4">
                 <HeaderTitle />
                 <SearchInput />
+                <InfiniteScrollTab />
             </div>
 
-            <MatchTabs />
+            {/* <MatchTabs /> */}
             {children}
         </section>
     )

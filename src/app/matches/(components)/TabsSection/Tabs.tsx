@@ -1,9 +1,9 @@
 import React from 'react'
 
-function MatchTabs() {
+function Tabs() {
     return (
         <div>Tabs</div>
     )
 }
 
-export default MatchTabs
+export default Tabs

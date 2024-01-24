@@ -8,6 +8,15 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+@font-face {
+  font-family: 'IranSans';
+  src: url('../assets/fonts/IRANSansMedium.woff2') format('woff2');
+}
+
+body {
+  font-family: 'IranSans', sans-serif;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

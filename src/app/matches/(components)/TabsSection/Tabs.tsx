@@ -4,13 +4,42 @@ import { MouseEventHandler, useCallback, useEffect, useLayoutEffect, useRef, use
 import DateLink from "./TabItem";
 
 function DateTabs() {
-    const [isVisible, setIsVisible] = useState(false);
-    const [nextDates, setNextDates] = useState<string[]>([]);
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const date = searchParams.get('date');
-    const targetRef = useRef(null);
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const date = searchParams.get('date')
+    const targetRef = useRef(null)
+    const [isVisible, setIsVisible] = useState(false)
+    const [nextDates, setNextDates] = useState<string[]>([])
+    const router = useRouter()
+
+    useLayoutEffect(() => {
+        const today = getFormattedDate()
+        router.push(pathname + '?' + createQueryString('date', today))
+    }, [])
+
+    useEffect(() => {
+        if (isVisible) {
+            generateNextDates(10)
+        }
+    }, [isVisible])
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            { root: null, rootMargin: '0px', threshold: 0.5 }
+        );
+        if (targetRef.current) {
+            observer.observe(targetRef.current);
+        }
+
+        return () => {
+            if (targetRef.current) {
+                observer.unobserve(targetRef.current);
+            }
+        };
+    }, []);
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -67,45 +96,15 @@ function DateTabs() {
         setNextDates((prevDates) => [...prevDates, ...newDates]);
     };
 
-    useEffect(() => {
-        if (isVisible) {
-            generateNextDates(10)
-        }
-    }, [isVisible])
-
-    useLayoutEffect(() => {
-        const today = getFormattedDate()
-        router.push(pathname + '?' + createQueryString('date', today));
-    }, [])
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsVisible(entry.isIntersecting);
-            },
-            { root: null, rootMargin: '0px', threshold: 0.5 }
-        );
-
-        if (targetRef.current) {
-            observer.observe(targetRef.current);
-        }
-
-        return () => {
-            if (targetRef.current) {
-                observer.unobserve(targetRef.current);
-            }
-        };
-    }, []);
-
     return (
         <div className='w-full text-TextGray scrollbar-thin mt-4 flex flex-row overflow-x-scroll'>
-            <DateLink onClick={navigateToDate(getFormattedDate(-1))} label={'دیروز'} isActive={date === yesterday} />
-            <DateLink onClick={navigateToDate(getFormattedDate())} label={'امروز'} isActive={date === today} />
-            <DateLink onClick={navigateToDate(getFormattedDate(1))} label={'فردا'} isActive={date === nextDay} />
+            <DateLink onClick={navigateToDate(getFormattedDate(-1))} label={'دیروز'} isActive={date === yesterday || false} />
+            <DateLink onClick={navigateToDate(getFormattedDate())} label={'امروز'} isActive={date === today || false} />
+            <DateLink onClick={navigateToDate(getFormattedDate(1))} label={'فردا'} isActive={date === nextDay || false} />
             {
                 nextDates.map((day, number) => (
                     day === getFormattedDate(1) ? null : (
-                        <DateLink key={number} onClick={navigateToDate(day)} label={convertToPersianDate(day)} isActive={date === day} />
+                        <DateLink key={number} onClick={navigateToDate(day)} label={convertToPersianDate(day)} isActive={date === day || false} />
                     )
                 ))
             }

@@ -1,31 +1,72 @@
-# In name of Allah
+# Football App
 
-## Introduction
+This project is a simple mobile UI for displaying football matches. It fetches data from the [Football API](https://core-sport-api.zarebin.ir/api/football/fixtures/) and presents it in a mobile-friendly interface.
+it has fixed dock on the bottom, on dock provided five button either of them redirect to specific page.
+only implement matches page to show all mathes you can select a date.
+## Technologies Used
 
-We are going to develop a react based web application to get live scores of football games. It will be a simple panel (**only mobile design is needed**) with an **infinite tab** scrolling side to side. Each page indicates a specific day with list of games played on that day. The list of games will be categorized based on their league. You could get a grasp of features in the image below. Ofcourse this is not a 0 or 1 task, so you can push code based on how much progress you have made, but try to implement features as similar as you can (it has points in final review).
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
-![Screenshot from 2022-06-25 17-02-51](https://user-images.githubusercontent.com/61571233/175773756-b6e136dc-4ca7-4ee2-b88e-248d4591a638.png "UI for live score page")
-<p align="center">
-UI for live score page
-</p>
+## Getting Started
 
-**Note**: For data, use [this api](https://core-sport-api.zarebin.ir/api/football/fixtures/?date=2023-01-03).
+### Prerequisites
 
-## Expectations
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
-So What does matter to us?
-- a clean structure of codebase & components
-- clean code practices
-- ability to layout page correctly
-- well designed API calls
-- profound understanding of states
-- finally, ability to learn
+### Installation
 
-## Tasks
+1. Clone the repository:
 
-1. Fork this repository
-2. Estimate the develop 
-3. Learn & Develop
-4. Push your code to your repository 
-5. Send us a pull request, we will review and get back to you
-6. Enjoy
+   ```bash
+   git clone <repository-url>
+Change into the project directory:
+
+bash
+Copy code
+cd football-app
+Install dependencies:
+
+bash
+Copy code
+yarn install
+Running the App
+bash
+Copy code
+yarn dev
+This will start the development server. Open your browser and visit http://localhost:3000 to view the app.
+
+## Features
+- Displays football in a mobile-friendly interface.
+- Utilizes the Football API to fetch data.
+### Folder Structure
+- app/: Contains Next.js pages.
+- components/: Contains components that is used in entire app.
+- constants/: Contains some constant value.
+- hook/: a resuable component to fetch data.
+- assets/: Contains all fonts and images.
+Feel free to modify the project structure to suit your preferences.
+
+## API Reference
+
+#### Get all items
+
+```http
+  GET https://core-sport-api.zarebin.ir/api/football/fixtures/
+```
+
+#### Get item
+
+```http
+  GET /api/items/?date=${date}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `date`      | `string` | **Required**. date of item to fetch |
+
+#### example
+
+make request into this format 'date=2024-01-25'
+
+https://core-sport-api.zarebin.ir/api/football/fixtures/?date=2024-01-25

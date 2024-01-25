@@ -19,7 +19,7 @@ function DateTabs() {
 
     useEffect(() => {
         if (isVisible) {
-            generateNextDates(10)
+            generateNextDates(14)
         }
     }, [isVisible])
 

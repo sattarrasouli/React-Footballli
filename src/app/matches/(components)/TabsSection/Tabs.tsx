@@ -1,26 +1,30 @@
 'use client'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useLayoutEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { MouseEventHandler, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import DateLink from "./TabItem";
 
 function DateTabs() {
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
-    const date = searchParams.get('date')
+    const [isVisible, setIsVisible] = useState(false);
+    const [nextDates, setNextDates] = useState<string[]>([]);
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const date = searchParams.get('date');
+    const targetRef = useRef(null);
+
     const createQueryString = useCallback(
         (name: string, value: string) => {
-            const params = new URLSearchParams(searchParams.toString())
-            params.set(name, value)
+            const params = new URLSearchParams(searchParams.toString());
+            params.set(name, value);
 
-            return params.toString()
+            return params.toString();
         },
         [searchParams]
-    )
+    );
 
     function getFormattedDate(offset = 0) {
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() + offset);
-
         const year = currentDate.getFullYear();
         const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
         const day = currentDate.getDate().toString().padStart(2, '0');
@@ -28,35 +32,86 @@ function DateTabs() {
         return `${year}-${month}-${day}`;
     }
 
-    const today = getFormattedDate(); // Today
-    const yesterday = getFormattedDate(-1); // Yesterday
-    const nextDay = getFormattedDate(1); // Next day
-    console.log('date', date)
-    console.log('today', today)
+    const today = getFormattedDate();
+    const yesterday = getFormattedDate(-1);
+    const nextDay = getFormattedDate(1);
+
+    const moment = require('jalali-moment');
+
+    const months = ["فروردين", "ارديبهشت", "خرداد", "تير", "مرداد", "شهريور", "مهر", "آبان", "آذر", "دي", "بهمن", "اسفند"];
+    function convertToPersianDate(today: string) {
+        const gregorianMoment = moment(today, 'YYYY-MM-DD');
+        const persianMonthNumber = gregorianMoment.format('jMM');
+        const persianDayNumber = gregorianMoment.format('jD');
+        const monthIndex = parseInt(persianMonthNumber, 10) - 1;
+        const persianMonthName = months[monthIndex];
+        return `${persianDayNumber} ${persianMonthName}`;
+    }
+
+    const navigateToDate = (date: string): MouseEventHandler<HTMLAnchorElement> => (event) => {
+        event.preventDefault();
+        const newPath = pathname + '?' + createQueryString('date', date);
+        router.push(newPath);
+    };
+
+    const generateNextDates = (start: number) => {
+        const today = new Date();
+        const newDates: string[] = [];
+        const startDate = nextDates.length === 0 ? today : new Date(nextDates[nextDates.length - 1]);
+
+        for (let i = 1; i <= start; i++) {
+            const nextDate = new Date(startDate);
+            nextDate.setDate(startDate.getDate() + i);
+            newDates.push(nextDate.toISOString().split('T')[0]);
+        }
+        setNextDates((prevDates) => [...prevDates, ...newDates]);
+    };
+
+    useEffect(() => {
+        if (isVisible) {
+            generateNextDates(10)
+        }
+    }, [isVisible])
+
     useLayoutEffect(() => {
-        router.push(pathname + '?' + createQueryString('date', today))
+        const today = getFormattedDate()
+        router.push(pathname + '?' + createQueryString('date', today));
     }, [])
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            { root: null, rootMargin: '0px', threshold: 0.5 }
+        );
+
+        if (targetRef.current) {
+            observer.observe(targetRef.current);
+        }
+
+        return () => {
+            if (targetRef.current) {
+                observer.unobserve(targetRef.current);
+            }
+        };
+    }, []);
+
     return (
-        <div className='w-full text-TextGray mt-4'>
-            <a onClick={() => {
-                router.push(pathname + '?' + createQueryString('date', yesterday))
-            }} className={`font-IranSans text-lg ml-10 ${date === yesterday && 'border-b-4'} border-TextGreen pb-3`}
-            >دیروز</a>
-            <a
-                onClick={() => {
-                    router.push(pathname + '?' + createQueryString('date', today))
-                }}
-                className={`font-IranSans text-lg ml-10 ${date === today && 'border-b-4'} border-TextGreen pb-3`}
-            >امروز</a>
-            <a className={`font-IranSans text-lg ml-10 ${date === nextDay && 'border-b-4'} border-TextGreen pb-3`}
-                onClick={() => {
-                    router.push(pathname + '?' + createQueryString('date', nextDay))
-                }}
-            >فردا</a>
-            <a className='font-IranSans text-lg ml-10' >۲۱ شهریور</a>
-        </div>
-    )
+        <div className='w-full text-TextGray scrollbar-thin mt-4 flex flex-row overflow-x-scroll'>
+            <DateLink onClick={navigateToDate(getFormattedDate(-1))} label={'دیروز'} isActive={date === yesterday} />
+            <DateLink onClick={navigateToDate(getFormattedDate())} label={'امروز'} isActive={date === today} />
+            <DateLink onClick={navigateToDate(getFormattedDate(1))} label={'فردا'} isActive={date === nextDay} />
+            {
+                nextDates.map((day, number) => (
+                    day === getFormattedDate(1) ? null : (
+                        <DateLink key={number} onClick={navigateToDate(day)} label={convertToPersianDate(day)} isActive={date === day} />
+                    )
+                ))
+            }
+            <div ref={targetRef}>...</div>
+        </div >
+    );
 }
 
-export default DateTabs
+export default DateTabs;

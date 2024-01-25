@@ -1,5 +1,5 @@
 import { IData } from '@/constants/interfaces/interfaces';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const useFetch = (url: string) => {
@@ -16,6 +16,7 @@ const useFetch = (url: string) => {
                 setData(result);
             } catch (error) {
                 setError(error as Error);
+                console.error(error)
             } finally {
                 setLoading(false);
             }

@@ -1,4 +1,3 @@
-import React from 'react'
 import second from '@/assets/img/search1.png'
 
 function SearchInput() {

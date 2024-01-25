@@ -1,11 +1,12 @@
 'use client'
 import { iconsData } from "@/constants/icons/Icons";
-import { usePathname } from "next/navigation"
+import { usePathname } from "next/navigation";
 
 function HeaderTitle() {
+
     const pathname = usePathname()
-    console.log('pathname', pathname)
-    const { svg, text } = iconsData[pathname.replace('/', '')];
+    const { svg, text } = iconsData[pathname.replace('/', '')]
+
     return (
         <div className='flex flex-row justify-between m-2 items-center'>
             <span>

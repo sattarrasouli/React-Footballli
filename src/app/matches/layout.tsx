@@ -1,8 +1,7 @@
+'use client'
 import SearchInput from "@/components/SearchInputInHeader/SearchInput"
-import HeaderTitle from "../../components/HeaderTitle/HeaderTitle"
-import DateTabs from "./(components)/TabsSection/Tabs"
-import Dock from "@/components/Dock/Dock"
 import HeaderTitleInMatches from "./(components)/HeaderTitleInMatches/HeaderTitleInMatches"
+import DateTabs from "./(components)/TabsSection/Tabs"
 
 export default function MatchesLayout({
     children,
@@ -11,7 +10,7 @@ export default function MatchesLayout({
 }) {
     return (
         <section>
-            <div className="p-4 bg-white">
+            <div className="p-4 pb-0 bg-white">
                 <HeaderTitleInMatches />
                 <SearchInput />
                 <DateTabs />

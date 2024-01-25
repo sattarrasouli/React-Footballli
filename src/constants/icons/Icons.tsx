@@ -1,13 +1,5 @@
 import React, { FC } from 'react';
-
-interface IconData {
-    svg: string;
-    text: string;
-}
-
-interface IconsData {
-    [key: string]: IconData;
-}
+import { IconProps, IconsData } from '../interfaces/interfaces';
 
 export const iconsData: IconsData = {
     profile: {
@@ -81,10 +73,6 @@ export const iconsData: IconsData = {
     },
 };
 
-interface IconProps {
-    name: string;
-    fill: string;
-}
 
 const Icon: FC<IconProps> = ({ name, fill }) => {
     const { svg, text } = iconsData[name];

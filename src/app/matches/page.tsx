@@ -1,9 +1,9 @@
-import React from 'react'
-import GameSectionDropDown from './(components)/GameSection/GameSection'
+'use client'
+import GameSectionDropDown from './(components)/MatchSection/MatchSectionContainer'
 
 function Matches() {
     return (
-        <div className=' flex w-full p-4'>
+        <div className='flex w-full p-4'>
             <GameSectionDropDown />
         </div>
     )

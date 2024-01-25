@@ -1,5 +1,4 @@
 import LoaderCss from '@/components/LoaderCss/LoaderCss'
-import React from 'react'
 
 function loading() {
     return (
